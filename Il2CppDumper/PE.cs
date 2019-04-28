@@ -68,11 +68,6 @@ namespace Il2CppDumper
             return false;
         }
 
-        public override bool AdvancedSearch(int methodCount)
-        {
-            return false;
-        }
-
         public override bool PlusSearch(int methodCount, int typeDefinitionsCount)
         {
             var execList = new List<SectionHeader>();
@@ -110,14 +105,7 @@ namespace Il2CppDumper
                 plusSearch.SetPointerRangeSecond(imageBase, data);
                 metadataRegistration = plusSearch.FindMetadataRegistration64Bit();
             }
-            if (codeRegistration != 0 && metadataRegistration != 0)
-            {
-                Console.WriteLine("CodeRegistration : {0:x}", codeRegistration);
-                Console.WriteLine("MetadataRegistration : {0:x}", metadataRegistration);
-                Init(codeRegistration, metadataRegistration);
-                return true;
-            }
-            return false;
+            return AutoInit(codeRegistration, metadataRegistration);
         }
 
         public override bool SymbolSearch()

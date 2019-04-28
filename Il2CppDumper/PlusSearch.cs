@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Il2CppDumper
 {
@@ -40,7 +38,7 @@ namespace Il2CppDumper
                     {
                         start = section.offset,
                         end = section.offset + section.size,
-                        address = section.address
+                        address = section.addr
                     });
                 }
             }
@@ -56,39 +54,7 @@ namespace Il2CppDumper
                     {
                         start = section.offset,
                         end = section.offset + section.size,
-                        address = section.address
-                    });
-                }
-            }
-        }
-
-        public void SetSearch(params Elf32_Shdr[] sections)
-        {
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    search.Add(new Section
-                    {
-                        start = section.sh_offset,
-                        end = section.sh_offset + section.sh_size,
-                        address = section.sh_addr
-                    });
-                }
-            }
-        }
-
-        public void SetSearch(params Elf64_Shdr[] sections)
-        {
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    search.Add(new Section
-                    {
-                        start = section.sh_offset,
-                        end = section.sh_offset + section.sh_size,
-                        address = section.sh_addr
+                        address = section.addr
                     });
                 }
             }
@@ -142,6 +108,22 @@ namespace Il2CppDumper
             }
         }
 
+        public void SetSearch(params NSOSegmentHeader[] sections)
+        {
+            foreach (var section in sections)
+            {
+                if (section != null)
+                {
+                    search.Add(new Section
+                    {
+                        start = section.FileOffset,
+                        end = section.FileOffset + section.DecompressedSize,
+                        address = section.MemoryOffset
+                    });
+                }
+            }
+        }
+
         public void SetPointerRangeFirst(params MachoSection64Bit[] sections)
         {
             foreach (var section in sections)
@@ -152,7 +134,7 @@ namespace Il2CppDumper
                     {
                         start = section.offset,
                         end = section.offset + section.size,
-                        address = section.address
+                        address = section.addr
                     });
                 }
             }
@@ -168,39 +150,7 @@ namespace Il2CppDumper
                     {
                         start = section.offset,
                         end = section.offset + section.size,
-                        address = section.address
-                    });
-                }
-            }
-        }
-
-        public void SetPointerRangeFirst(params Elf32_Shdr[] sections)
-        {
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    pointerRange1.Add(new Section
-                    {
-                        start = section.sh_offset,
-                        end = section.sh_offset + section.sh_size,
-                        address = section.sh_addr
-                    });
-                }
-            }
-        }
-
-        public void SetPointerRangeFirst(params Elf64_Shdr[] sections)
-        {
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    pointerRange1.Add(new Section
-                    {
-                        start = section.sh_offset,
-                        end = section.sh_offset + section.sh_size,
-                        address = section.sh_addr
+                        address = section.addr
                     });
                 }
             }
@@ -254,6 +204,22 @@ namespace Il2CppDumper
             }
         }
 
+        public void SetPointerRangeFirst(params NSOSegmentHeader[] sections)
+        {
+            foreach (var section in sections)
+            {
+                if (section != null)
+                {
+                    pointerRange1.Add(new Section
+                    {
+                        start = section.FileOffset,
+                        end = section.FileOffset + section.DecompressedSize,
+                        address = section.MemoryOffset
+                    });
+                }
+            }
+        }
+
         public void SetPointerRangeSecond(params MachoSection64Bit[] sections)
         {
             pointerRange2.Clear();
@@ -263,9 +229,9 @@ namespace Il2CppDumper
                 {
                     pointerRange2.Add(new Section
                     {
-                        start = section.address,
-                        end = section.address + section.size,
-                        address = section.address
+                        start = section.addr,
+                        end = section.addr + section.size,
+                        address = section.addr
                     });
                 }
             }
@@ -280,43 +246,9 @@ namespace Il2CppDumper
                 {
                     pointerRange2.Add(new Section
                     {
-                        start = section.address,
-                        end = section.address + section.size,
-                        address = section.address
-                    });
-                }
-            }
-        }
-
-        public void SetPointerRangeSecond(params Elf32_Shdr[] sections)
-        {
-            pointerRange2.Clear();
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    pointerRange2.Add(new Section
-                    {
-                        start = section.sh_addr,
-                        end = section.sh_addr + section.sh_size,
-                        address = section.sh_addr
-                    });
-                }
-            }
-        }
-
-        public void SetPointerRangeSecond(params Elf64_Shdr[] sections)
-        {
-            pointerRange2.Clear();
-            foreach (var section in sections)
-            {
-                if (section != null)
-                {
-                    pointerRange2.Add(new Section
-                    {
-                        start = section.sh_addr,
-                        end = section.sh_addr + section.sh_size,
-                        address = section.sh_addr
+                        start = section.addr,
+                        end = section.addr + section.size,
+                        address = section.addr
                     });
                 }
             }
@@ -385,6 +317,23 @@ namespace Il2CppDumper
                         start = section.VirtualAddress,
                         end = section.VirtualAddress + section.VirtualSize + imageBase,
                         address = section.VirtualAddress + imageBase
+                    });
+                }
+            }
+        }
+
+        public void SetPointerRangeSecond(params NSOSegmentHeader[] sections)
+        {
+            pointerRange2.Clear();
+            foreach (var section in sections)
+            {
+                if (section != null)
+                {
+                    pointerRange2.Add(new Section
+                    {
+                        start = section.MemoryOffset,
+                        end = section.MemoryOffset + section.DecompressedSize,
+                        address = section.MemoryOffset
                     });
                 }
             }
